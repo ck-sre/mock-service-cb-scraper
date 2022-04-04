@@ -44,7 +44,7 @@ To run the dockerfile:
     docker build ./src -t  cyrilkurian/coinbase_scraper:2.0.0
     docker run -p 0.0.0.0:5001:5001/tcp cyrilkurian/coinbase_scraper:0.0.1
 
-The above steps are github action steps as well
+The above steps are in github action steps as well
 
 ## Github Actions
 Github actions are defined in .github/workflows
