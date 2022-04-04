@@ -33,7 +33,7 @@ jobs:
     env:
         APP_PORT: 5001
   
-  test-curl:
+  test-mock-service:
     runs-on: ubuntu-latest
     needs: docker-build-push
     steps:
@@ -42,10 +42,10 @@ jobs:
           docker run --name mock-coinbase-service --detach -p 127.0.0.1:${{ env.APP_PORT }}:${{ env.APP_PORT }}/tcp ${{ secrets.DOCKER_HUB_USERNAME }}/coinbase-scraper:${{ github.sha }};
           curl "127.0.0.1:${{ env.APP_PORT }}/" -o output.json;
           cat output.json| jq .msg.data.currency || (echo fail && exit 1);
-      - name: curl
-        uses: wei/curl@master
-        with:
-          args: "127.0.0.1:${{ env.APP_PORT }}/ -o output.json"
+      # - name: curl
+      #   uses: wei/curl@master
+      #   with:
+      #     args: "127.0.0.1:${{ env.APP_PORT }}/ -o output.json"
     env:
         APP_PORT: 5001
 
@@ -66,18 +66,3 @@ jobs:
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
   
-  test_mock_service:
-    runs-on: 'ubuntu-latest'
-    needs: docker-build-push
-    steps:
-    - uses: actions/checkout@v1
-
-    - name: 'Deploy'
-      run: |
-          docker run --detach --network host -p 127.0.0.1:${{ env.APP_PORT }}:${{ env.APP_PORT }}/tcp ${{ secrets.DOCKER_HUB_USERNAME }}/coinbase-scraper:${{ github.sha }}
-    - name: Curl
-      run: |
-        curl "127.0.0.1:${{ env.APP_PORT }}/ -o output.json"
-        cat output.json| jq .msg.data.currency || echo fail;
-    env:
-        APP_PORT: 5001
