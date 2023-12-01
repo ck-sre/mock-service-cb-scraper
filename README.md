@@ -1,5 +1,7 @@
 # Coinbase scraper project
 
+This project looks for the latest price for a token and also has support for metrics for requests
+
 Source code is in ./src
 
 Metrics are on /metrics
